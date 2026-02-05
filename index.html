@@ -14,14 +14,19 @@
         <span>Brian Brinton</span>
         <small>IT Service Desk Manager · American Fork, UT</small>
       </a>
-      <nav class="nav">
-        <a href="#summary">Summary</a>
-        <a href="#experience">Experience</a>
-        <a href="#skills">Skills</a>
-        <a href="#education">Education</a>
-        <a href="#certifications">Certifications</a>
-        <a href="#contact">Contact</a>
-      </nav>
+      <div class="header-actions">
+        <nav class="nav">
+          <a href="#summary">Summary</a>
+          <a href="#experience">Experience</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#certifications">Certifications</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Toggle color theme">
+          <span class="theme-toggle-label">Switch to light</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -242,5 +247,35 @@
       </div>
     </div>
   </footer>
+  <script>
+    (() => {
+      const storageKey = "theme";
+      const root = document.documentElement;
+      const toggle = document.querySelector("[data-theme-toggle]");
+      if (!toggle) {
+        return;
+      }
+
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const storedTheme = localStorage.getItem(storageKey);
+      const initialTheme = storedTheme || (prefersDark ? "dark" : "light");
+
+      const updateToggle = (theme) => {
+        const isDark = theme === "dark";
+        root.setAttribute("data-theme", theme);
+        toggle.setAttribute("aria-pressed", isDark ? "true" : "false");
+        toggle.querySelector(".theme-toggle-label").textContent = isDark ? "Light Mode" : "Dark Mode";
+      };
+
+      updateToggle(initialTheme);
+
+      toggle.addEventListener("click", () => {
+        const currentTheme = root.getAttribute("data-theme") || initialTheme;
+        const nextTheme = currentTheme === "dark" ? "light" : "dark";
+        localStorage.setItem(storageKey, nextTheme);
+        updateToggle(nextTheme);
+      });
+    })();
+  </script>
 </body>
 </html>
